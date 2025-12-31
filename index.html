@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy New Year 2026 ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+
+    .container { position: relative; z-index: 5; padding: 30px 15px 80px; }
+
+    h1 { font-size: 2.8rem; animation: glow 2s infinite alternate; }
+    @keyframes glow { from { text-shadow: 0 0 10px #fff; } to { text-shadow: 0 0 25px gold; } }
+
+    .heart { font-size: 3rem; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1);} }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      background: rgba(255,255,255,0.15);
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .choice-btn {
+      display: block;
+      width: 90%;
+      margin: 12px auto;
+      padding: 15px;
+      border-radius: 30px;
+      border: none;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: white;
+      cursor: pointer;
+    }
+
+    .popup, .date-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .popup-content {
+      background: white;
+      color: #ff4d6d;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .popup-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      background: #ff4d6d;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .countdown {
+      font-size: 1.5rem;
+      margin-top: 25px;
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<audio autoplay loop>
+  <source src="https://pagalfree.com/musics/128-Raataan%20Lambiyan%20-%20Shershaah%20128%20Kbps.mp3" type="audio/mpeg">
+</audio>
+
+<div class="popup" id="welcomePopup">
+  <div class="popup-content">
+    <h2>💖 For You, Manu 💖</h2>
+    <p>Monu is ready to welcome 2026 with you ✨</p>
+    <button onclick="closeWelcome()">Aww ❤️</button>
+  </div>
+</div>
+
+<div class="popup" id="datePopup" style="display:none;">
+  <div class="popup-content">
+    <h3>Let's meet on… 💕</h3>
+    <input type="date" id="meetDate" />
+    <button onclick="sendMail()">Send to Monu 💌</button>
+  </div>
+</div>
+
+<div class="container">
+  <h1>🎆 Happy New Year 2026, Manu 🎆</h1>
+  <div class="heart">❤️</div>
+
+  <div class="message">
+    My love ❤️<br><br>
+    2026 begins with you, and that’s all I ever wanted 💫<br>
+    Let’s make memories that sparkle brighter than fireworks ✨
+  </div>
+
+  <div class="countdown" id="countdown"></div>
+
+  <h2 style="margin-top:30px;">How should we start our year? 🥰</h2>
+
+  <button class="choice-btn" onclick="openDate('Romantic Dinner')">🍽️ Romantic Dinner</button>
+  <button class="choice-btn" onclick="openDate('Shopping Date')">🛍️ Shopping Date</button>
+  <button class="choice-btn" onclick="openDate('Movie Night')">🎬 Movie Night</button>
+  <button class="choice-btn" onclick="openDate('Long Drive')">🌆 Long Drive</button>
+
+  <div class="footer">Forever yours, <b>Monu ❤️</b></div>
+</div>
+
+<script>
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function random(min, max) { return Math.random() * (max - min) + min; }
+
+class Firework {
+  constructor() {
+    this.x = random(0, canvas.width);
+    this.y = canvas.height;
+    this.targetY = random(100, canvas.height / 2);
+    this.color = `hsl(${Math.random()*360},100%,60%)`;
+    this.speed = random(3, 6);
+  }
+  update() {
+    this.y -= this.speed;
+    if (this.y <= this.targetY) this.explode();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+  explode() {
+    for (let i = 0; i < 30; i++) particles.push(new Particle(this.x, this.y, this.color));
+    this.y = canvas.height + 100;
+  }
+}
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.radius = 2;
+    this.vx = random(-4, 4);
+    this.vy = random(-4, 4);
+    this.life = 60;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life--;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+let fireworks = [];
+let particles = [];
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (Math.random() < 0.05) fireworks.push(new Firework());
+
+  fireworks.forEach((fw, i) => {
+    fw.update();
+    fw.draw();
+  });
+
+  particles.forEach((p, i) => {
+    p.update();
+    p.draw();
+    if (p.life <= 0) particles.splice(i, 1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+function closeWelcome() {
+  document.getElementById('welcomePopup').style.display = 'none';
+}
+
+function openDate(option) {
+  selectedOption = option;
+  document.getElementById('datePopup').style.display = 'flex';
+}
+
+function sendMail() {
+  const date = document.getElementById('meetDate').value;
+  if (!date) return alert('Please select a date ❤️');
+
+  const subject = 'New Year Date Plan ❤️';
+  const body = `Hey Monu,%0D%0A%0D%0AI choose: ${selectedOption}%0D%0ALet’s meet on: ${date}%0D%0A%0D%0ALove, Manu 💖`;
+  window.location.href = `mailto:suyashkulkarni653@gmail.com?subject=${subject}&body=${body}`;
+}
+
+// Countdown
+const newYear = new Date('January 1, 2026 00:00:00').getTime();
+setInterval(() => {
+  const now = new Date().getTime();
+  const diff = newYear - now;
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const s = Math.floor((diff % (1000 * 60)) / 1000);
+  document.getElementById('countdown').innerHTML = `⏳ Countdown: ${d}d ${h}h ${m}m ${s}s`;
+}, 1000);
+</script>
+
+</body>
+</html>
